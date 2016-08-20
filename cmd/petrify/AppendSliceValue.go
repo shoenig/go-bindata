@@ -12,6 +12,7 @@ func (s *AppendSliceValue) String() string {
 	return strings.Join(*s, ",")
 }
 
+// Set value by appending it to s.
 func (s *AppendSliceValue) Set(value string) error {
 	if *s == nil {
 		*s = make([]string, 0, 1)

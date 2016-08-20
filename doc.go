@@ -126,4 +126,4 @@ The tags are appended to a `// +build` line in the beginning of the output file
 and must follow the build tags syntax specified by the go tool.
 
 */
-package bindata
+package petrify

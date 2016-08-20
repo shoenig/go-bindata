@@ -2,7 +2,7 @@
 // license. Its contents can be found at:
 // http://creativecommons.org/publicdomain/zero/1.0/
 
-package bindata
+package petrify
 
 import (
 	"bytes"
@@ -37,21 +37,21 @@ func writeReleaseHeader(w io.Writer, c *Config) error {
 	var err error
 	if c.NoCompress {
 		if c.NoMemCopy {
-			err = header_uncompressed_nomemcopy(w)
+			err = headerUncompressedNoMemcopy(w)
 		} else {
-			err = header_uncompressed_memcopy(w)
+			err = headerUncompressedMemcopy(w)
 		}
 	} else {
 		if c.NoMemCopy {
-			err = header_compressed_nomemcopy(w)
+			err = headerCompressedNoMemcopy(w)
 		} else {
-			err = header_compressed_memcopy(w)
+			err = headerCompressedMemcopy(w)
 		}
 	}
 	if err != nil {
 		return err
 	}
-	return header_release_common(w)
+	return headerReleaseCommon(w)
 }
 
 // writeReleaseAsset write a release entry for the given asset.
@@ -67,21 +67,21 @@ func writeReleaseAsset(w io.Writer, c *Config, asset *Asset) error {
 
 	if c.NoCompress {
 		if c.NoMemCopy {
-			err = uncompressed_nomemcopy(w, asset, fd)
+			err = uncompressedNoMemcopy(w, asset, fd)
 		} else {
-			err = uncompressed_memcopy(w, asset, fd)
+			err = uncompressedMemcopy(w, asset, fd)
 		}
 	} else {
 		if c.NoMemCopy {
-			err = compressed_nomemcopy(w, asset, fd)
+			err = compressedNoMemcopy(w, asset, fd)
 		} else {
-			err = compressed_memcopy(w, asset, fd)
+			err = compressedMemcopy(w, asset, fd)
 		}
 	}
 	if err != nil {
 		return err
 	}
-	return asset_release_common(w, c, asset)
+	return assetReleaseCommon(w, c, asset)
 }
 
 // sanitize prepares a valid UTF-8 string as a raw string constant.
@@ -97,7 +97,7 @@ func sanitize(b []byte) []byte {
 	return bytes.Replace(b, []byte("\xEF\xBB\xBF"), []byte("`+\"\\xEF\\xBB\\xBF\"+`"), -1)
 }
 
-func header_compressed_nomemcopy(w io.Writer) error {
+func headerCompressedNoMemcopy(w io.Writer) error {
 	_, err := fmt.Fprintf(w, `import (
 	"bytes"
 	"compress/gzip"
@@ -134,7 +134,7 @@ func bindataRead(data, name string) ([]byte, error) {
 	return err
 }
 
-func header_compressed_memcopy(w io.Writer) error {
+func headerCompressedMemcopy(w io.Writer) error {
 	_, err := fmt.Fprintf(w, `import (
 	"bytes"
 	"compress/gzip"
@@ -171,7 +171,7 @@ func bindataRead(data []byte, name string) ([]byte, error) {
 	return err
 }
 
-func header_uncompressed_nomemcopy(w io.Writer) error {
+func headerUncompressedNoMemcopy(w io.Writer) error {
 	_, err := fmt.Fprintf(w, `import (
 	"fmt"
 	"io/ioutil"
@@ -198,7 +198,7 @@ func bindataRead(data, name string) ([]byte, error) {
 	return err
 }
 
-func header_uncompressed_memcopy(w io.Writer) error {
+func headerUncompressedMemcopy(w io.Writer) error {
 	_, err := fmt.Fprintf(w, `import (
 	"fmt"
 	"io/ioutil"
@@ -211,7 +211,7 @@ func header_uncompressed_memcopy(w io.Writer) error {
 	return err
 }
 
-func header_release_common(w io.Writer) error {
+func headerReleaseCommon(w io.Writer) error {
 	_, err := fmt.Fprintf(w, `type asset struct {
 	bytes []byte
 	info  os.FileInfo
@@ -247,7 +247,7 @@ func (fi bindataFileInfo) Sys() interface{} {
 	return err
 }
 
-func compressed_nomemcopy(w io.Writer, asset *Asset, r io.Reader) error {
+func compressedNoMemcopy(w io.Writer, asset *Asset, r io.Reader) error {
 	_, err := fmt.Fprintf(w, `var _%s = "`, asset.Func)
 	if err != nil {
 		return err
@@ -274,7 +274,7 @@ func %sBytes() ([]byte, error) {
 	return err
 }
 
-func compressed_memcopy(w io.Writer, asset *Asset, r io.Reader) error {
+func compressedMemcopy(w io.Writer, asset *Asset, r io.Reader) error {
 	_, err := fmt.Fprintf(w, `var _%s = []byte("`, asset.Func)
 	if err != nil {
 		return err
@@ -301,7 +301,7 @@ func %sBytes() ([]byte, error) {
 	return err
 }
 
-func uncompressed_nomemcopy(w io.Writer, asset *Asset, r io.Reader) error {
+func uncompressedNoMemcopy(w io.Writer, asset *Asset, r io.Reader) error {
 	_, err := fmt.Fprintf(w, `var _%s = "`, asset.Func)
 	if err != nil {
 		return err
@@ -325,7 +325,7 @@ func %sBytes() ([]byte, error) {
 	return err
 }
 
-func uncompressed_memcopy(w io.Writer, asset *Asset, r io.Reader) error {
+func uncompressedMemcopy(w io.Writer, asset *Asset, r io.Reader) error {
 	_, err := fmt.Fprintf(w, `var _%s = []byte(`, asset.Func)
 	if err != nil {
 		return err
@@ -351,7 +351,7 @@ func %sBytes() ([]byte, error) {
 	return err
 }
 
-func asset_release_common(w io.Writer, c *Config, asset *Asset) error {
+func assetReleaseCommon(w io.Writer, c *Config, asset *Asset) error {
 	fi, err := os.Stat(asset.Path)
 	if err != nil {
 		return err

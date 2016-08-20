@@ -2,7 +2,7 @@
 // license. Its contents can be found at:
 // http://creativecommons.org/publicdomain/zero/1.0/
 
-package bindata
+package petrify
 
 import (
 	"bufio"
@@ -109,7 +109,7 @@ func Translate(c *Config) error {
 	return writeRestore(bfd)
 }
 
-// Implement sort.Interface for []os.FileInfo based on Name()
+// ByName implements sort.Interface for []os.FileInfo based on Name()
 type ByName []os.FileInfo
 
 func (v ByName) Len() int           { return len(v) }

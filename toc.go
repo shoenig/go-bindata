@@ -2,7 +2,7 @@
 // license. Its contents can be found at:
 // http://creativecommons.org/publicdomain/zero/1.0/
 
-package bindata
+package petrify
 
 import (
 	"fmt"
@@ -31,11 +31,12 @@ func (node *assetTree) child(name string) *assetTree {
 	return rv
 }
 
-func (root *assetTree) Add(route []string, asset Asset) {
+// Add route to node.
+func (node *assetTree) Add(route []string, asset Asset) {
 	for _, name := range route {
-		root = root.child(name)
+		node = node.child(name)
 	}
-	root.Asset = asset
+	node.Asset = asset
 }
 
 func ident(w io.Writer, n int) {
@@ -44,24 +45,23 @@ func ident(w io.Writer, n int) {
 	}
 }
 
-func (root *assetTree) funcOrNil() string {
-	if root.Asset.Func == "" {
+func (node *assetTree) funcOrNil() string {
+	if node.Asset.Func == "" {
 		return "nil"
-	} else {
-		return root.Asset.Func
 	}
+	return node.Asset.Func
 }
 
-func (root *assetTree) writeGoMap(w io.Writer, nident int) {
-	fmt.Fprintf(w, "&bintree{%s, map[string]*bintree{", root.funcOrNil())
+func (node *assetTree) writeGoMap(w io.Writer, nident int) {
+	fmt.Fprintf(w, "&bintree{%s, map[string]*bintree{", node.funcOrNil())
 
-	if len(root.Children) > 0 {
+	if len(node.Children) > 0 {
 		io.WriteString(w, "\n")
 
 		// Sort to make output stable between invocations
-		filenames := make([]string, len(root.Children))
+		filenames := make([]string, len(node.Children))
 		i := 0
-		for filename, _ := range root.Children {
+		for filename := range node.Children {
 			filenames[i] = filename
 			i++
 		}
@@ -70,7 +70,7 @@ func (root *assetTree) writeGoMap(w io.Writer, nident int) {
 		for _, p := range filenames {
 			ident(w, nident+1)
 			fmt.Fprintf(w, `"%s": `, p)
-			root.Children[p].writeGoMap(w, nident+1)
+			node.Children[p].writeGoMap(w, nident+1)
 		}
 		ident(w, nident)
 	}
@@ -82,13 +82,13 @@ func (root *assetTree) writeGoMap(w io.Writer, nident int) {
 	io.WriteString(w, "\n")
 }
 
-func (root *assetTree) WriteAsGoMap(w io.Writer) error {
+func (node *assetTree) WriteAsGoMap(w io.Writer) error {
 	_, err := fmt.Fprint(w, `type bintree struct {
 	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
 var _bintree = `)
-	root.writeGoMap(w, 0)
+	node.writeGoMap(w, 0)
 	return err
 }
 

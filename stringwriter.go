@@ -2,7 +2,7 @@
 // license. Its contents can be found at:
 // http://creativecommons.org/publicdomain/zero/1.0/
 
-package bindata
+package petrify
 
 import (
 	"io"
@@ -10,6 +10,7 @@ import (
 
 const lowerHex = "0123456789abcdef"
 
+// StringWriter writes the lower hex value of p.
 type StringWriter struct {
 	io.Writer
 	c int

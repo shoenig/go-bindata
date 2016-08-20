@@ -12,15 +12,15 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/jteeuwen/go-bindata"
+	"github.com/shoenig/petrify"
 )
 
 func main() {
 	cfg := parseArgs()
-	err := bindata.Translate(cfg)
+	err := petrify.Translate(cfg)
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "bindata: %v\n", err)
+		fmt.Fprintf(os.Stderr, "petrify: %v\n", err)
 		os.Exit(1)
 	}
 }
@@ -30,10 +30,10 @@ func main() {
 //
 // This function exits the program with an error, if
 // any of the command line options are incorrect.
-func parseArgs() *bindata.Config {
+func parseArgs() *petrify.Config {
 	var version bool
 
-	c := bindata.NewConfig()
+	c := petrify.NewConfig()
 
 	flag.Usage = func() {
 		fmt.Printf("Usage: %s [options] <input directories>\n\n", os.Args[0])
@@ -53,19 +53,19 @@ func parseArgs() *bindata.Config {
 	flag.StringVar(&c.Output, "o", c.Output, "Optional name of the output file to be generated.")
 	flag.BoolVar(&version, "version", false, "Displays version information.")
 
-	ignore := make([]string, 0)
+	ignore := []string{}
 	flag.Var((*AppendSliceValue)(&ignore), "ignore", "Regex pattern to ignore")
 
 	flag.Parse()
 
-	patterns := make([]*regexp.Regexp, 0)
+	patterns := []*regexp.Regexp{}
 	for _, pattern := range ignore {
 		patterns = append(patterns, regexp.MustCompile(pattern))
 	}
 	c.Ignore = patterns
 
 	if version {
-		fmt.Printf("%s\n", Version())
+		fmt.Printf("%s\n", Version)
 		os.Exit(0)
 	}
 
@@ -77,7 +77,7 @@ func parseArgs() *bindata.Config {
 	}
 
 	// Create input configurations.
-	c.Input = make([]bindata.InputConfig, flag.NArg())
+	c.Input = make([]petrify.InputConfig, flag.NArg())
 	for i := range c.Input {
 		c.Input[i] = parseInput(flag.Arg(i))
 	}
@@ -91,17 +91,15 @@ func parseArgs() *bindata.Config {
 //  ex:
 //      /path/to/foo/...    -> (/path/to/foo, true)
 //      /path/to/bar        -> (/path/to/bar, false)
-func parseInput(path string) bindata.InputConfig {
+func parseInput(path string) petrify.InputConfig {
 	if strings.HasSuffix(path, "/...") {
-		return bindata.InputConfig{
+		return petrify.InputConfig{
 			Path:      filepath.Clean(path[:len(path)-4]),
 			Recursive: true,
 		}
-	} else {
-		return bindata.InputConfig{
-			Path:      filepath.Clean(path),
-			Recursive: false,
-		}
 	}
-
+	return petrify.InputConfig{
+		Path:      filepath.Clean(path),
+		Recursive: false,
+	}
 }
