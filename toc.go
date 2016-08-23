@@ -209,6 +209,42 @@ func AssetNames() []string {
 	return names
 }
 
+var defaultPageFuncMap = template.FuncMap{
+	"eq": func(a, b interface{}) bool {
+		return a == b
+	},
+}
+
+// MustParseTemplates is like MustAsset but assumes the input files
+// are html templates.
+func MustParseTemplates(files ...string) *template.Template {
+	if len(files) == 0 {
+		panic("MustParseTemplates requires at least one filename")
+	}
+
+	// the first file is the root template
+	root := template.New(path.Base(files[0]))
+	if b, e := Asset(string(files[0])); e != nil {
+		panic("failed to load " + files[0] + ": " + e.Error())
+	} else if _, e = root.Parse(string(b)); e != nil {
+		panic("failed to parse " + files[0] + ": " + e.Error())
+	}
+
+	// the remaining files are children templates
+	for _, file := range files[1:] {
+		child := root.New(path.Base(file))
+		if b, e := Asset(string(file)); e != nil {
+			panic("failed to load " + string(file) + ": " + e.Error())
+		} else if _, e = child.Parse(string(b)); e != nil {
+			panic("failed to parse " + string(file) + ": " + e.Error())
+		}
+	}
+
+	root.Funcs(defaultPageFuncMap)
+
+	return root
+}
+
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() (*asset, error){
 `)

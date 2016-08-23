@@ -35,6 +35,8 @@ func writeDebugHeader(w io.Writer) error {
 	"os"
 	"path/filepath"
 	"strings"
+	"path"
+    "html/template"
 )
 
 // bindataRead reads the given file from disk. It returns an error on failure.

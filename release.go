@@ -108,6 +108,8 @@ func headerCompressedNoMemcopy(w io.Writer) error {
 	"path/filepath"
 	"strings"
 	"time"
+	"path"
+    "html/template"
 )
 
 func bindataRead(data, name string) ([]byte, error) {
@@ -145,6 +147,8 @@ func headerCompressedMemcopy(w io.Writer) error {
 	"path/filepath"
 	"strings"
 	"time"
+	"path"
+	"html/template"
 )
 
 func bindataRead(data []byte, name string) ([]byte, error) {
@@ -181,6 +185,8 @@ func headerUncompressedNoMemcopy(w io.Writer) error {
 	"strings"
 	"time"
 	"unsafe"
+	"path"
+	"html/template"
 )
 
 func bindataRead(data, name string) ([]byte, error) {
@@ -206,6 +212,8 @@ func headerUncompressedMemcopy(w io.Writer) error {
 	"path/filepath"
 	"strings"
 	"time"
+	"path"
+	"html/template"
 )
 `)
 	return err
