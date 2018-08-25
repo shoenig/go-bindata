@@ -12,7 +12,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/shoenig/petrify"
+	"github.com/shoenig/petrify/v4"
 )
 
 func main() {
