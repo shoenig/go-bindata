@@ -1,1 +1,1 @@
-module github.com/shoenig/petrify
+module github.com/shoenig/petrify/v4
