@@ -8,6 +8,10 @@ It comes with a command line tool in the `cmd/petrify` sub directory.
 This tool offers a set of command line options, used to customize the
 output being generated.
 
+If there are go.sum verification errors, be sure to use v4.1.0+ and the
+go1.12.x compiler, as previous versions computed sums of symlinks
+incorrectly.
+
 ### go-bindata
 
 Note that petrify is a fork of the popular github.com/jteeuwen/go-bindata
