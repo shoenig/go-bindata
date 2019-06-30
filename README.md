@@ -3,9 +3,9 @@ petrify
 
 Command `petrify` compiles static files into Go source code.
 
-[![Go Report Card](https://goreportcard.com/badge/go.gophers.dev/pkgs/petrify)](https://goreportcard.com/report/go.gophers.dev/pkgs/petrify)
+[![Go Report Card](https://goreportcard.com/badge/go.gophers.dev/cmds/petrify)](https://goreportcard.com/report/go.gophers.dev/cmds/petrify)
 [![Build Status](https://travis-ci.com/shoenig/petrify.svg?branch=master)](https://travis-ci.com/shoenig/petrify)
-[![GoDoc](https://godoc.org/go.gophers.dev/pkgs/petrify?status.svg)](https://godoc.org/go.gophers.dev/pkgs/petrify)
+[![GoDoc](https://godoc.org/go.gophers.dev/cmds/petrify?status.svg)](https://godoc.org/go.gophers.dev/cmds/petrify)
 [![NetflixOSS Lifecycle](https://img.shields.io/osslifecycle/shoenig/petrify.svg)](OSSMETADATA)
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0%201.0-lightgrey.svg)](http://creativecommons.org/publicdomain/zero/1.0/)
 
