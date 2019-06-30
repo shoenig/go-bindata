@@ -56,7 +56,7 @@ type FakeFile struct {
 	Timestamp time.Time
 }
 
-var _ (os.FileInfo) = (*FakeFile)(nil)
+var _ os.FileInfo = (*FakeFile)(nil)
 
 // Name implements FileInfo.Name.
 func (f *FakeFile) Name() string {
@@ -187,6 +187,7 @@ func (fs *AssetFS) Open(name string) (http.File, error) {
 	if len(name) > 0 && name[0] == '/' {
 		name = name[1:]
 	}
+
 	if b, err := fs.Asset(name); err == nil {
 		timestamp := defaultFileTimestamp
 		if fs.AssetInfo != nil {
@@ -196,15 +197,20 @@ func (fs *AssetFS) Open(name string) (http.File, error) {
 		}
 		return NewAssetFile(name, b, timestamp), nil
 	}
-	if children, err := fs.AssetDir(name); err == nil {
+
+	children, err := fs.AssetDir(name)
+	if err != nil {
 		return NewAssetDirectory(name, children, fs), nil
-	} else {
-		// If the error is not found, return an error that will
-		// result in a 404 error. Otherwise the server returns
-		// a 500 error for files not found.
-		if strings.Contains(err.Error(), "not found") {
-			return nil, os.ErrNotExist
-		}
-		return nil, err
 	}
+	// If the error is not found, return an error that will
+	// result in a 404 error. Otherwise the server returns
+	// a 500 error for files not found.
+	if strings.Contains(str(err), "not found") {
+		return nil, os.ErrNotExist
+	}
+	return nil, err
+}
+
+func str(err error) string {
+	return err.Error()
 }

@@ -11,7 +11,7 @@ import (
 
 var (
 	newline    = []byte{'\n'}
-	dataindent = []byte{'\t', '\t'}
+	dataIndent = []byte{'\t', '\t'}
 	space      = []byte{' '}
 )
 
@@ -28,14 +28,14 @@ func (w *ByteWriter) Write(p []byte) (n int, err error) {
 
 	for n = range p {
 		if w.c%12 == 0 {
-			w.Writer.Write(newline)
-			w.Writer.Write(dataindent)
+			_, _ = w.Writer.Write(newline)
+			_, _ = w.Writer.Write(dataIndent)
 			w.c = 0
 		} else {
-			w.Writer.Write(space)
+			_, _ = w.Writer.Write(space)
 		}
 
-		fmt.Fprintf(w.Writer, "0x%02x,", p[n])
+		_, _ = fmt.Fprintf(w.Writer, "0x%02x,", p[n])
 		w.c++
 	}
 

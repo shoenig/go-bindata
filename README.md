@@ -1,4 +1,15 @@
-## petrify
+petrify
+=======
+
+Command `petrify` compiles static files into Go source code.
+
+[![Go Report Card](https://goreportcard.com/badge/go.gophers.dev/pkgs/petrify)](https://goreportcard.com/report/go.gophers.dev/pkgs/petrify)
+[![Build Status](https://travis-ci.com/shoenig/petrify.svg?branch=master)](https://travis-ci.com/shoenig/petrify)
+[![GoDoc](https://godoc.org/go.gophers.dev/pkgs/petrify?status.svg)](https://godoc.org/go.gophers.dev/pkgs/petrify)
+[![NetflixOSS Lifecycle](https://img.shields.io/osslifecycle/shoenig/petrify.svg)](OSSMETADATA)
+[![License: CC0-1.0](https://img.shields.io/badge/License-CC0%201.0-lightgrey.svg)](http://creativecommons.org/publicdomain/zero/1.0/)
+
+# Project Overview
 
 This package converts any file into managable Go source code. Useful for
 embedding binary data into a go program. The file data is optionally gzip
@@ -8,22 +19,26 @@ It comes with a command line tool in the `cmd/petrify` sub directory.
 This tool offers a set of command line options, used to customize the
 output being generated.
 
-If there are go.sum verification errors, be sure to use v4.1.0+ and the
-go1.12.x compiler, as previous versions computed sums of symlinks
-incorrectly.
+### This is a fork
 
-### go-bindata
+Note that `petrify` is a fork of the once popular `github.com/jteeuwen/go-bindata`
+This fork exists to enable continued development of features and fixes. The
+original `go-bindata` project is no longer maintained.
 
-Note that petrify is a fork of the popular github.com/jteeuwen/go-bindata
-This fork exists to enable continued development of features and fixes.
 
-### Installation
+# Getting Started
 
-To install the library and command line program, use the following:
+The `petrify` command can be installed by running
+```bash
+go get -u go.gophers.dev/cmds/petrify/v5/cmd/petrify
+```
 
-	go get -u github.com/shoenig/petrify/...
+In the Go modules world, typically tools like `petrify` will be used in `go:generate` directives
+```golang
+//go:generate go run go.gophers.dev/cmds/petrify/v5/cmd/petrify <arguments...>
+```
 
-### Usage
+### Example Usage
 
 Conversion is done on one or more sets of files. They are all embedded in a new
 Go source file, along with a table of contents and an `Asset` function,
@@ -31,23 +46,26 @@ which allows quick access to the asset, based on its name.
 
 The simplest invocation generates a `bindata.go` file in the current
 working directory. It includes all assets from the `data` directory.
-
-	$ petrify data/
+```bash
+$ petrify data/
+```
 
 To include all input sub-directories recursively, use the elipsis postfix
 as defined for Go import paths. Otherwise it will only consider assets in the
 input directory itself.
-
-	$ petrify data/...
+```bash
+$ petrify data/...
+```
 
 To specify the name of the output file being generated, we use the following:
-
-	$ petrify -o myfile.go data/
+```bash
+$ petrify -o myfile.go data/
+```
 
 Multiple input directories can be specified if necessary.
-
-	$ petrify dir1/... /path/to/dir2/... dir3
-
+```bash
+$ petrify dir1/... /path/to/dir2/... dir3
+```
 
 The following paragraphs detail some of the command line options which can be 
 supplied to `petrify`. Refer to the `testdata/out` directory for various
@@ -55,21 +73,20 @@ output examples from the assets in `testdata/in`. Each example uses different
 command line options.
 
 To ignore files, pass in regexes using -ignore, for example:
-
-    $ petrify -ignore=\\.gitignore data/...
+```bash
+$ petrify -ignore=\\.gitignore data/...
+```
 
 ### Accessing an asset
 
 To access asset data, we use the `Asset(string) ([]byte, error)` function which
 is included in the generated output.
-
-	data, err := Asset("pub/style/foo.css")
-	if err != nil {
-		// Asset was not found.
-	}
-
-	// use asset data
-
+```bash
+data, err := Asset("pub/style/foo.css")
+if err != nil {
+    // Asset was not found.
+}
+```
 
 ### Debug vs Release builds
 
@@ -143,7 +160,6 @@ func myfile() []byte {
 }
 ```
 
-
 ### Optional compression
 
 When the `-nocompress` flag is given, the supplied resource is *not* GZIP
@@ -156,7 +172,6 @@ even increase the size of the data.
 
 The default behaviour of the program is to use compression.
 
-
 ### Path prefix stripping
 
 The keys used in the `_bindata` map, are the same as the input file name
@@ -168,16 +183,20 @@ the map keys and function names.
 
 For example, running without the `-prefix` flag, we get:
 
-	$ petrify /path/to/templates/
-
-	_bindata["/path/to/templates/foo.html"] = path_to_templates_foo_html
+```bash
+$ petrify /path/to/templates/
+```
+```golang
+_bindata["/path/to/templates/foo.html"] = path_to_templates_foo_html
+```
 
 Running with the `-prefix` flag, we get:
-
-	$ petrify -prefix "/path/to/" /path/to/templates/
-
-	_bindata["templates/foo.html"] = templates_foo_html
-
+```bash
+$ petrify -prefix "/path/to/" /path/to/templates/
+```
+```golang
+_bindata["templates/foo.html"] = templates_foo_html
+```
 
 ### Build tags
 
@@ -189,3 +208,13 @@ format is specified at build time with the appropriate tags.
 The tags are appended to a `// +build` line in the beginning of the output file
 and must follow the build tags syntax specified by the go tool.
 
+# Contributing
+
+The `go.gophers.dev/cmds/petrify` module is always improving with new features
+and error corrections. For contributing bug fixes and features please file an issue.
+
+# License
+
+The original `go-bindata` project was open source under the [CC0 1.0](LICENSE) license.
+
+The fork `go.gophers.dev/cmds/petrify` module is also open source under the [CC0 1.0](LICENSE) license.
