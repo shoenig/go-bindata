@@ -27,7 +27,7 @@ func (w *StringWriter) Write(p []byte) (n int, err error) {
 	for n, b = range p {
 		buf[2] = lowerHex[b/16]
 		buf[3] = lowerHex[b%16]
-		w.Writer.Write(buf)
+		_, _ = w.Writer.Write(buf)
 		w.c++
 	}
 

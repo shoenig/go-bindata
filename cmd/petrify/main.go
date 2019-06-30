@@ -1,7 +1,3 @@
-// This work is subject to the CC0 1.0 Universal (CC0 1.0) Public Domain Dedication
-// license. Its contents can be found at:
-// http://creativecommons.org/publicdomain/zero/1.0/
-
 package main
 
 import (
@@ -12,7 +8,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/shoenig/petrify/v4"
+	"go.gophers.dev/cmds/petrify/v5"
 )
 
 func main() {
@@ -20,7 +16,7 @@ func main() {
 	err := petrify.Translate(cfg)
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "petrify: %v\n", err)
+		_, _ = fmt.Fprintf(os.Stderr, "petrify: %v\n", err)
 		os.Exit(1)
 	}
 }
@@ -53,12 +49,12 @@ func parseArgs() *petrify.Config {
 	flag.StringVar(&c.Output, "o", c.Output, "Optional name of the output file to be generated.")
 	flag.BoolVar(&version, "version", false, "Displays version information.")
 
-	ignore := []string{}
+	var ignore []string
 	flag.Var((*AppendSliceValue)(&ignore), "ignore", "Regex pattern to ignore")
 
 	flag.Parse()
 
-	patterns := []*regexp.Regexp{}
+	var patterns []*regexp.Regexp
 	for _, pattern := range ignore {
 		patterns = append(patterns, regexp.MustCompile(pattern))
 	}
@@ -71,7 +67,7 @@ func parseArgs() *petrify.Config {
 
 	// Make sure we have input paths.
 	if flag.NArg() == 0 {
-		fmt.Fprintf(os.Stderr, "Missing <input dir>\n\n")
+		_, _ = fmt.Fprintf(os.Stderr, "Missing <input dir>\n\n")
 		flag.Usage()
 		os.Exit(1)
 	}
@@ -88,7 +84,7 @@ func parseArgs() *petrify.Config {
 // parseRecursive determines whether the given path has a recrusive indicator and
 // returns a new path with the recursive indicator chopped off if it does.
 //
-//  ex:
+//  e.g.:
 //      /path/to/foo/...    -> (/path/to/foo, true)
 //      /path/to/bar        -> (/path/to/bar, false)
 func parseInput(path string) petrify.InputConfig {

@@ -63,7 +63,7 @@ func writeReleaseAsset(w io.Writer, c *Config, asset *Asset) error {
 		return err
 	}
 
-	defer fd.Close()
+	defer ignoreClose(fd)
 
 	if c.NoCompress {
 		if c.NoMemCopy {
@@ -255,6 +255,10 @@ func (fi bindataFileInfo) Sys() interface{} {
 	return err
 }
 
+func ignoreClose(c io.Closer) {
+	_ = c.Close()
+}
+
 func compressedNoMemcopy(w io.Writer, asset *Asset, r io.Reader) error {
 	_, err := fmt.Fprintf(w, `var _%s = "`, asset.Func)
 	if err != nil {
@@ -263,7 +267,7 @@ func compressedNoMemcopy(w io.Writer, asset *Asset, r io.Reader) error {
 
 	gz := gzip.NewWriter(&StringWriter{Writer: w})
 	_, err = io.Copy(gz, r)
-	gz.Close()
+	ignoreClose(gz)
 
 	if err != nil {
 		return err
@@ -290,7 +294,7 @@ func compressedMemcopy(w io.Writer, asset *Asset, r io.Reader) error {
 
 	gz := gzip.NewWriter(&StringWriter{Writer: w})
 	_, err = io.Copy(gz, r)
-	gz.Close()
+	ignoreClose(gz)
 
 	if err != nil {
 		return err
@@ -344,9 +348,9 @@ func uncompressedMemcopy(w io.Writer, asset *Asset, r io.Reader) error {
 		return err
 	}
 	if utf8.Valid(b) && !bytes.Contains(b, []byte{0}) {
-		fmt.Fprintf(w, "`%s`", sanitize(b))
+		_, _ = fmt.Fprintf(w, "`%s`", sanitize(b))
 	} else {
-		fmt.Fprintf(w, "%+q", b)
+		_, _ = fmt.Fprintf(w, "%+q", b)
 	}
 
 	_, err = fmt.Fprintf(w, `)

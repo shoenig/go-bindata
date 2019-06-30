@@ -41,7 +41,7 @@ func (node *assetTree) Add(route []string, asset Asset) {
 
 func ident(w io.Writer, n int) {
 	for i := 0; i < n; i++ {
-		w.Write([]byte{'\t'})
+		_, _ = w.Write([]byte{'\t'})
 	}
 }
 
@@ -53,10 +53,10 @@ func (node *assetTree) funcOrNil() string {
 }
 
 func (node *assetTree) writeGoMap(w io.Writer, nident int) {
-	fmt.Fprintf(w, "&bintree{%s, map[string]*bintree{", node.funcOrNil())
+	_, _ = fmt.Fprintf(w, "&bintree{%s, map[string]*bintree{", node.funcOrNil())
 
 	if len(node.Children) > 0 {
-		io.WriteString(w, "\n")
+		_, _ = io.WriteString(w, "\n")
 
 		// Sort to make output stable between invocations
 		filenames := make([]string, len(node.Children))
@@ -69,17 +69,17 @@ func (node *assetTree) writeGoMap(w io.Writer, nident int) {
 
 		for _, p := range filenames {
 			ident(w, nident+1)
-			fmt.Fprintf(w, `"%s": `, p)
+			_, _ = fmt.Fprintf(w, `"%s": `, p)
 			node.Children[p].writeGoMap(w, nident+1)
 		}
 		ident(w, nident)
 	}
 
-	io.WriteString(w, "}}")
+	_, _ = io.WriteString(w, "}}")
 	if nident > 0 {
-		io.WriteString(w, ",")
+		_, _ = io.WriteString(w, ",")
 	}
-	io.WriteString(w, "\n")
+	_, _ = io.WriteString(w, "\n")
 }
 
 func (node *assetTree) WriteAsGoMap(w io.Writer) error {

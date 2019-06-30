@@ -1,4 +1,4 @@
-module github.com/shoenig/petrify/v4
+module go.gophers.dev/cmds/petrify/v5
 
 go 1.12
 

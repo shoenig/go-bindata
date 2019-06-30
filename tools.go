@@ -9,6 +9,7 @@ package tools
 
 import (
 	_ "github.com/kisielk/errcheck"
+
 	_ "golang.org/x/lint/golint"
 	_ "golang.org/x/tools/go/analysis/passes/shadow/cmd/shadow"
 )
