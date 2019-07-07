@@ -7,6 +7,6 @@ package main
 // Version contains version string information.
 const Version = `
 petrify (a fork of go-bindata)
-Version 0.1
+Version 5
 Original Copyright (c) 2010-2013, Jim Teeuwen.
 `
