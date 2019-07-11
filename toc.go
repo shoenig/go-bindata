@@ -213,6 +213,9 @@ var defaultPageFuncMap = template.FuncMap{
 	"eq": func(a, b interface{}) bool {
 		return a == b
 	},
+	"modz": func(i, j int) bool {
+	    return (i %% j) == 0
+	},
 }
 
 // MustParseTemplates is like MustAsset but assumes the input files
