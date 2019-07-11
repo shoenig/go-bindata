@@ -227,6 +227,10 @@ func MustParseTemplates(files ...string) *template.Template {
 
 	// the first file is the root template
 	root := template.New(path.Base(files[0]))
+
+	// load default custom funcs (OG go-bindata has bug here)
+	root.Funcs(defaultPageFuncMap)
+
 	if b, e := Asset(string(files[0])); e != nil {
 		panic("failed to load " + files[0] + ": " + e.Error())
 	} else if _, e = root.Parse(string(b)); e != nil {
@@ -242,8 +246,6 @@ func MustParseTemplates(files ...string) *template.Template {
 			panic("failed to parse " + string(file) + ": " + e.Error())
 		}
 	}
-
-	root.Funcs(defaultPageFuncMap)
 
 	return root
 }
