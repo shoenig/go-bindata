@@ -3,9 +3,9 @@ petrify
 
 Command `petrify` compiles static files into Go source code.
 
-[![Go Report Card](https://goreportcard.com/badge/go.gophers.dev/cmds/petrify)](https://goreportcard.com/report/go.gophers.dev/cmds/petrify)
+[![Go Report Card](https://goreportcard.com/badge/gophers.dev/cmds/petrify)](https://goreportcard.com/report/gophers.dev/cmds/petrify)
 [![Build Status](https://travis-ci.com/shoenig/petrify.svg?branch=master)](https://travis-ci.com/shoenig/petrify)
-[![GoDoc](https://godoc.org/go.gophers.dev/cmds/petrify?status.svg)](https://godoc.org/go.gophers.dev/cmds/petrify)
+[![GoDoc](https://godoc.org/gophers.dev/cmds/petrify?status.svg)](https://godoc.org/gophers.dev/cmds/petrify)
 [![NetflixOSS Lifecycle](https://img.shields.io/osslifecycle/shoenig/petrify.svg)](OSSMETADATA)
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0%201.0-lightgrey.svg)](http://creativecommons.org/publicdomain/zero/1.0/)
 
@@ -30,12 +30,12 @@ original `go-bindata` project is no longer maintained.
 
 The `petrify` command can be installed by running
 ```bash
-go get -u go.gophers.dev/cmds/petrify/v5/cmd/petrify
+go get -u gophers.dev/cmds/petrify/v5/cmd/petrify
 ```
 
 In the Go modules world, typically tools like `petrify` will be used in `go:generate` directives
 ```golang
-//go:generate go run go.gophers.dev/cmds/petrify/v5/cmd/petrify <arguments...>
+//go:generate go run gophers.dev/cmds/petrify/v5/cmd/petrify <arguments...>
 ```
 
 ### Example Usage
@@ -210,11 +210,11 @@ and must follow the build tags syntax specified by the go tool.
 
 # Contributing
 
-The `go.gophers.dev/cmds/petrify` module is always improving with new features
+The `gophers.dev/cmds/petrify` module is always improving with new features
 and error corrections. For contributing bug fixes and features please file an issue.
 
 # License
 
 The original `go-bindata` project was open source under the [CC0 1.0](LICENSE) license.
 
-The fork `go.gophers.dev/cmds/petrify` module is also open source under the [CC0 1.0](LICENSE) license.
+The fork `gophers.dev/cmds/petrify` module is also open source under the [CC0 1.0](LICENSE) license.

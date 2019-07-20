@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"strings"
 
-	"go.gophers.dev/cmds/petrify/v5"
+	"gophers.dev/cmds/petrify/v5"
 )
 
 func main() {
