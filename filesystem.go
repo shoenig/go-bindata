@@ -1,4 +1,4 @@
-package petrify
+package petrify // import "gophers.dev/cmds/petrify/v5"
 
 // copied from go-bindata-assetfs
 // with the following copyright
