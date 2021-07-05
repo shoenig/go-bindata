@@ -30,7 +30,7 @@ original `go-bindata` project is no longer maintained.
 
 The `petrify` command can be installed by running
 ```bash
-go get -u gophers.dev/cmds/petrify/v5/cmd/petrify
+go install gophers.dev/cmds/petrify/v5/cmd/petrify@latest
 ```
 
 In the Go modules world, typically tools like `petrify` will be used in `go:generate` directives
